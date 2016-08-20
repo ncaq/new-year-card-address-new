@@ -4,8 +4,15 @@ import           Import
 import           Yesod.Form.Bootstrap3
 
 getHomeR :: Handler Html
-getHomeR = runDB $ do
-    peopleList <- selectList [] [Desc PeopleCreatedAt]
+getHomeR = postHomeR
+
+postHomeR :: Handler Html
+postHomeR = runDB $ do
+    ((result, form), enctype) <- lift $ runFormPost peopleForm
+    case result of
+        FormSuccess people -> insert_ people
+        _ -> return ()
+    peopleList <- selectList [] [Desc PeopleId]
     lift $ defaultLayout $ do
         setTitle "new year card address new"
         $(widgetFile "homepage")

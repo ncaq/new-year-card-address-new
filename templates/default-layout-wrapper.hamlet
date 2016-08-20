@@ -7,5 +7,5 @@ $doctype 5
         ^{pageHead pc}
 
     <body>
-        <main>
+        <main .container .main-content .text-center>
             ^{pageBody pc}
