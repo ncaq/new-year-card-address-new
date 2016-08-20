@@ -4,6 +4,7 @@ User
     UniqueUser ident
 
 People
+    owner UserId
     code Text
     place Text
     name Text
