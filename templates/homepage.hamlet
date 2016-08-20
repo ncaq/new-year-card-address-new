@@ -1,0 +1,2 @@
+$forall people <- peopleList
+    #{show people}

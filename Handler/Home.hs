@@ -6,6 +6,8 @@ import           Yesod.Form.Bootstrap3 (BootstrapFormLayout (..),
                                         renderBootstrap3, withSmallInput)
 
 getHomeR :: Handler Html
-getHomeR = defaultLayout $ do
-    setTitle "new year card address new"
-    $(widgetFile "homepage")
+getHomeR = runDB $ do
+    peopleList <- selectList [] [Desc PeopleCreatedAt]
+    lift $ defaultLayout $ do
+        setTitle "new year card address new"
+        $(widgetFile "homepage")
