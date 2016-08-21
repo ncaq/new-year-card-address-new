@@ -8,14 +8,18 @@ getHomeR = postHomeR
 
 postHomeR :: Handler Html
 postHomeR = runDB $ do
-    ((result, form), enctype) <- lift $ runFormPost cardForm
-    case result of
-        FormSuccess card -> insert_ card
-        _ -> return ()
-    cardList <- selectList [] [Desc CardId]
-    lift $ defaultLayout $ do
-        setTitle "new year card address new"
-        $(widgetFile "homepage")
+    mUserId <- lift maybeAuthId
+    case mUserId of
+        Nothing -> redirect $ AuthR LoginR
+        Just userId -> do
+            ((result, form), enctype) <- lift $ runFormPost cardForm
+            case result of
+                FormSuccess card -> insert_ card
+                _ -> return ()
+            cardList <- selectList [CardUser ==. userId] [Desc CardId]
+            lift $ defaultLayout $ do
+                setTitle "身内向年賀状生成"
+                $(widgetFile "homepage")
 
 cardForm :: Form Card
 cardForm = renderBootstrap3 BootstrapBasicForm $ cardNew <$>
