@@ -3,8 +3,8 @@ User
     password Text Maybe
     UniqueUser ident
 
-People
-    owner UserId
+Card
+    user UserId
     code Text
     place Text
     name Text

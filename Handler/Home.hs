@@ -8,17 +8,17 @@ getHomeR = postHomeR
 
 postHomeR :: Handler Html
 postHomeR = runDB $ do
-    ((result, form), enctype) <- lift $ runFormPost peopleForm
+    ((result, form), enctype) <- lift $ runFormPost cardForm
     case result of
-        FormSuccess people -> insert_ people
+        FormSuccess card -> insert_ card
         _ -> return ()
-    peopleList <- selectList [] [Desc PeopleId]
+    cardList <- selectList [] [Desc CardId]
     lift $ defaultLayout $ do
         setTitle "new year card address new"
         $(widgetFile "homepage")
 
-peopleForm :: Form People
-peopleForm = renderBootstrap3 BootstrapBasicForm $ peopleNew <$>
+cardForm :: Form Card
+cardForm = renderBootstrap3 BootstrapBasicForm $ cardNew <$>
     lift requireAuthId <*>
     areq textField "郵便番号" Nothing <*>
     areq textField "住所" Nothing <*>
@@ -26,5 +26,5 @@ peopleForm = renderBootstrap3 BootstrapBasicForm $ peopleNew <$>
     lift (liftIO getCurrentTime) <*
     bootstrapSubmit ("追加" :: BootstrapSubmit Text)
 
-peopleNew :: UserId -> Text -> Text -> Text -> UTCTime -> People
-peopleNew peopleOwner peopleCode peoplePlace peopleName peopleCurrentAt = People{peopleOwner, peopleCode, peoplePlace, peopleName, peopleCreatedAt = peopleCurrentAt, peopleUpdatedAt = peopleCurrentAt}
+cardNew :: UserId -> Text -> Text -> Text -> UTCTime -> Card
+cardNew cardUser cardCode cardPlace cardName cardCurrentAt = Card{cardUser, cardCode, cardPlace, cardName, cardCreatedAt = cardCurrentAt, cardUpdatedAt = cardCurrentAt}
